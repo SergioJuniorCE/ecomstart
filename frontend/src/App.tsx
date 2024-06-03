@@ -1,23 +1,27 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
+import { api } from './lib/api'
 
 function App() {
   const [count, setCount] = useState(0)
-  const [products, setProducts] = useState<{id: number, name: string, price: number}[]>([])
+  const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
+    async function fetchData() {
+      const res = await api.products.$get()
+      const data = await res.json()
+      return data;
+    }
     setIsLoading(true)
-    fetch('/api/products')
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data)
-        setIsLoading(false)
-      })
-      .catch((err) => {
-        console.error(err)
-        setIsLoading(false)
-      })
+    fetchData().then((data) => {
+      setProducts(data)
+    }).catch((err) => {
+      console.log(err)
+    }).finally(() => {
+      setIsLoading(false)
+    })
+
   }, [])
 
   return (
