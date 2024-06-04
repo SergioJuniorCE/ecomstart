@@ -14,6 +14,7 @@ export const productsTable = sqliteTable("products", {
   category: integer('category')
     .notNull()
     .references(() => categoriesTable.id, { onDelete: 'set null' }),
-  description: text('description').notNull(),
-  image: text('image'),
+  description: text('description').notNull().default(''),
+  image: text('image').notNull().default(''),
+  totalSales: integer('total_sales').notNull().default(0),
 });

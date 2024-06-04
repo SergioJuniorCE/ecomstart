@@ -1,5 +1,4 @@
 import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { ThemeProvider } from "@/components/theme-provider"
 // import { ModeToggle } from '@/components/mode-toggle'
 import { CircleUserRound, Search, ShoppingBag } from 'lucide-react'
@@ -82,7 +81,7 @@ function Router() {
           </div>
         )}
         <Outlet />
-        <TanStackRouterDevtools />
+        {/* <TanStackRouterDevtools /> */}
       </div>
     </ThemeProvider>
   )

@@ -2,9 +2,16 @@ import { Sidebar } from '@/components/admin/sidebar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { SheetTrigger, SheetContent, Sheet } from '@/components/ui/sheet'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@radix-ui/react-dropdown-menu'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Link, Outlet, createFileRoute } from '@tanstack/react-router'
-import { PanelLeft, Package2, Home, ShoppingCart, Package, Users2, LineChart, Search } from 'lucide-react'
+import { PanelLeft, Package2, Home, ShoppingCart, Package, Users2, LineChart, Search, CircleUserIcon } from 'lucide-react'
 
 export const Route = createFileRoute('/_admin')({
   component: AdminLayout,
@@ -85,13 +92,7 @@ export function AdminLayout() {
                 size="icon"
                 className="overflow-hidden rounded-full"
               >
-                <img
-                  src="/placeholder-user.jpg"
-                  width={36}
-                  height={36}
-                  alt="Avatar"
-                  className="overflow-hidden rounded-full"
-                />
+                <CircleUserIcon className="w-5 h-5" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

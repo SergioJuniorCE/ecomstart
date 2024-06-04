@@ -1,5 +1,10 @@
 import { cn } from "@/lib/utils";
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@radix-ui/react-tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { Link, LinkProps, useRouterState } from "@tanstack/react-router";
 import { Home, ShoppingCart, Package, Users2, LineChart, Settings } from "lucide-react";
 
@@ -53,7 +58,7 @@ export function SidebarLinkWithTooltip(props: SidebarLinkWithTooltipProps) {
             {props.icon}
           </Link>
         </TooltipTrigger>
-        <TooltipContent side="right" className="p-1 rounded-lg bg-secondary">
+        <TooltipContent side="right">
           <p>{props.name}</p>
         </TooltipContent>
       </Tooltip>
