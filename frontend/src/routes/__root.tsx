@@ -1,59 +1,90 @@
 import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { ThemeProvider } from "@/components/theme-provider"
-import { ModeToggle } from '@/components/mode-toggle'
-import { Search } from 'lucide-react'
-import { Avatar } from '@radix-ui/react-avatar'
+// import { ModeToggle } from '@/components/mode-toggle'
+import { CircleUserRound, Search, ShoppingBag } from 'lucide-react'
 import CompanyLogo from '@/assets/company-logo.svg'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+
+function AccountDropdown() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <CircleUserRound />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="bg-white">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem>Billing</DropdownMenuItem>
+        <DropdownMenuItem>Team</DropdownMenuItem>
+        <DropdownMenuItem>Subscription</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+function Header() {
+  const isAdmin = true;
+  return (
+    <div className='flex items-center justify-between px-8 py-4'>
+      <Search />
+      <img src={CompanyLogo} alt="Company Logo" />
+      <div className="flex items-center gap-6">
+        {isAdmin && (
+          <Link to="/admin" className="[&.active]:font-bold">
+            Admin
+          </Link>
+        )}
+        <ShoppingBag />
+        <AccountDropdown />
+      </div>
+    </div>
+  )
+}
 
 function Navbar() {
-  const { pathname } = useLocation()
-
-  const isInAdmin = pathname.startsWith('/admin')
-
-  if (isInAdmin) return (<></>)
-
   return (
-    <div className="flex items-center gap-2">
-      <Link to="/" className="[&.active]:font-bold">
-        Home
-      </Link>{' '}
-      <Link to="/about" className="[&.active]:font-bold">
-        About
-      </Link>
+    <div className="flex items-center justify-between gap-2 px-8 py-4">
       <Link to="/products" className="[&.active]:font-bold">
-        Products
+        Jewelry & Accessories
+      </Link>{' '}
+      <Link to="/" className="[&.active]:font-bold">
+        Clothing & Shoes
       </Link>
-      <Link to="/admin/orders" className="[&.active]:font-bold">
-        Orders
+      <Link to="/" className="[&.active]:font-bold">
+        Home & Living
       </Link>
-      <Link to="/admin" className="[&.active]:font-bold">
-        admin
+      <Link to="/" className="[&.active]:font-bold">
+        Wedding & Party
       </Link>
-      <ModeToggle />
+      <Link to="/" className="[&.active]:font-bold">
+        Toys & Entertainment
+      </Link>
     </div>
   )
 }
 
 function Router() {
+
+  const { pathname } = useLocation()
+
+  const isInAdmin = pathname.startsWith('/admin')
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <Header />
-      <hr />
-      <Navbar />
-      <Outlet />
-      <TanStackRouterDevtools />
+      <div className="flex flex-col min-h-screen">
+        {!isInAdmin && (
+          <div className="px-4 sm:px-6 lg:px-8">
+            <Header />
+            <hr />
+            <Navbar />
+          </div>
+        )}
+        <Outlet />
+        <TanStackRouterDevtools />
+      </div>
     </ThemeProvider>
-  )
-}
-
-function Header() {
-  return (
-    <div className='flex justify-between'>
-      <Search className="w-5 h-5" />
-      <img src={CompanyLogo} alt="Company Logo" />
-      <Avatar className="size-5" />
-    </div>
   )
 }
 

@@ -5,7 +5,9 @@
     "start": "bun run backend/index.ts",
     "dev:backend": "cd backend && bun dev",
     "dev:frontend": "cd frontend && bun dev",
-    "dev": "bunx concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
+    "dev": "bunx concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"bun run studio\"",
+    "push": "cd backend && bun run db:push",
+    "studio": "cd backend && bun run studio"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.7",

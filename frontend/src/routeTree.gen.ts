@@ -14,29 +14,31 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AdminImport } from './routes/_admin'
+import { Route as ProductsCategoryIndexImport } from './routes/products/$category/index'
 import { Route as AdminAdminIndexImport } from './routes/_admin/admin/index'
 
 // Create Virtual Routes
 
-const ProductsLazyImport = createFileRoute('/products')()
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
-const AdminAdminProductsRouteLazyImport = createFileRoute(
-  '/_admin/admin/products',
+const ProductsIndexLazyImport = createFileRoute('/products/')()
+const AdminAdminProductsIndexLazyImport = createFileRoute(
+  '/_admin/admin/products/',
 )()
 const AdminAdminOrdersIndexLazyImport = createFileRoute(
   '/_admin/admin/orders/',
+)()
+const AdminAdminCustomersIndexLazyImport = createFileRoute(
+  '/_admin/admin/customers/',
+)()
+const AdminAdminAnalyticsIndexLazyImport = createFileRoute(
+  '/_admin/admin/analytics/',
 )()
 const AdminAdminOrdersRecentOrdersIndexLazyImport = createFileRoute(
   '/_admin/admin/orders/recent-orders/',
 )()
 
 // Create/Update Routes
-
-const ProductsLazyRoute = ProductsLazyImport.update({
-  path: '/products',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/products.lazy').then((d) => d.Route))
 
 const AboutLazyRoute = AboutLazyImport.update({
   path: '/about',
@@ -53,17 +55,29 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const ProductsIndexLazyRoute = ProductsIndexLazyImport.update({
+  path: '/products/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/products/index.lazy').then((d) => d.Route),
+)
+
+const ProductsCategoryIndexRoute = ProductsCategoryIndexImport.update({
+  path: '/products/$category/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AdminAdminIndexRoute = AdminAdminIndexImport.update({
   path: '/admin/',
   getParentRoute: () => AdminRoute,
 } as any)
 
-const AdminAdminProductsRouteLazyRoute =
-  AdminAdminProductsRouteLazyImport.update({
-    path: '/admin/products',
+const AdminAdminProductsIndexLazyRoute =
+  AdminAdminProductsIndexLazyImport.update({
+    path: '/admin/products/',
     getParentRoute: () => AdminRoute,
   } as any).lazy(() =>
-    import('./routes/_admin/admin/products/route.lazy').then((d) => d.Route),
+    import('./routes/_admin/admin/products/index.lazy').then((d) => d.Route),
   )
 
 const AdminAdminOrdersIndexLazyRoute = AdminAdminOrdersIndexLazyImport.update({
@@ -72,6 +86,22 @@ const AdminAdminOrdersIndexLazyRoute = AdminAdminOrdersIndexLazyImport.update({
 } as any).lazy(() =>
   import('./routes/_admin/admin/orders/index.lazy').then((d) => d.Route),
 )
+
+const AdminAdminCustomersIndexLazyRoute =
+  AdminAdminCustomersIndexLazyImport.update({
+    path: '/admin/customers/',
+    getParentRoute: () => AdminRoute,
+  } as any).lazy(() =>
+    import('./routes/_admin/admin/customers/index.lazy').then((d) => d.Route),
+  )
+
+const AdminAdminAnalyticsIndexLazyRoute =
+  AdminAdminAnalyticsIndexLazyImport.update({
+    path: '/admin/analytics/',
+    getParentRoute: () => AdminRoute,
+  } as any).lazy(() =>
+    import('./routes/_admin/admin/analytics/index.lazy').then((d) => d.Route),
+  )
 
 const AdminAdminOrdersRecentOrdersIndexLazyRoute =
   AdminAdminOrdersRecentOrdersIndexLazyImport.update({
@@ -108,19 +138,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
-    '/products': {
-      id: '/products'
+    '/products/': {
+      id: '/products/'
       path: '/products'
       fullPath: '/products'
-      preLoaderRoute: typeof ProductsLazyImport
+      preLoaderRoute: typeof ProductsIndexLazyImport
       parentRoute: typeof rootRoute
-    }
-    '/_admin/admin/products': {
-      id: '/_admin/admin/products'
-      path: '/admin/products'
-      fullPath: '/admin/products'
-      preLoaderRoute: typeof AdminAdminProductsRouteLazyImport
-      parentRoute: typeof AdminImport
     }
     '/_admin/admin/': {
       id: '/_admin/admin/'
@@ -129,11 +152,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminIndexImport
       parentRoute: typeof AdminImport
     }
+    '/products/$category/': {
+      id: '/products/$category/'
+      path: '/products/$category'
+      fullPath: '/products/$category'
+      preLoaderRoute: typeof ProductsCategoryIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/_admin/admin/analytics/': {
+      id: '/_admin/admin/analytics/'
+      path: '/admin/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AdminAdminAnalyticsIndexLazyImport
+      parentRoute: typeof AdminImport
+    }
+    '/_admin/admin/customers/': {
+      id: '/_admin/admin/customers/'
+      path: '/admin/customers'
+      fullPath: '/admin/customers'
+      preLoaderRoute: typeof AdminAdminCustomersIndexLazyImport
+      parentRoute: typeof AdminImport
+    }
     '/_admin/admin/orders/': {
       id: '/_admin/admin/orders/'
       path: '/admin/orders'
       fullPath: '/admin/orders'
       preLoaderRoute: typeof AdminAdminOrdersIndexLazyImport
+      parentRoute: typeof AdminImport
+    }
+    '/_admin/admin/products/': {
+      id: '/_admin/admin/products/'
+      path: '/admin/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminAdminProductsIndexLazyImport
       parentRoute: typeof AdminImport
     }
     '/_admin/admin/orders/recent-orders/': {
@@ -151,13 +202,16 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   AdminRoute: AdminRoute.addChildren({
-    AdminAdminProductsRouteLazyRoute,
     AdminAdminIndexRoute,
+    AdminAdminAnalyticsIndexLazyRoute,
+    AdminAdminCustomersIndexLazyRoute,
     AdminAdminOrdersIndexLazyRoute,
+    AdminAdminProductsIndexLazyRoute,
     AdminAdminOrdersRecentOrdersIndexLazyRoute,
   }),
   AboutLazyRoute,
-  ProductsLazyRoute,
+  ProductsIndexLazyRoute,
+  ProductsCategoryIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -171,7 +225,8 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/_admin",
         "/about",
-        "/products"
+        "/products/",
+        "/products/$category/"
       ]
     },
     "/": {
@@ -180,28 +235,41 @@ export const routeTree = rootRoute.addChildren({
     "/_admin": {
       "filePath": "_admin.tsx",
       "children": [
-        "/_admin/admin/products",
         "/_admin/admin/",
+        "/_admin/admin/analytics/",
+        "/_admin/admin/customers/",
         "/_admin/admin/orders/",
+        "/_admin/admin/products/",
         "/_admin/admin/orders/recent-orders/"
       ]
     },
     "/about": {
       "filePath": "about.lazy.tsx"
     },
-    "/products": {
-      "filePath": "products.lazy.tsx"
-    },
-    "/_admin/admin/products": {
-      "filePath": "_admin/admin/products/route.lazy.tsx",
-      "parent": "/_admin"
+    "/products/": {
+      "filePath": "products/index.lazy.tsx"
     },
     "/_admin/admin/": {
       "filePath": "_admin/admin/index.tsx",
       "parent": "/_admin"
     },
+    "/products/$category/": {
+      "filePath": "products/$category/index.tsx"
+    },
+    "/_admin/admin/analytics/": {
+      "filePath": "_admin/admin/analytics/index.lazy.tsx",
+      "parent": "/_admin"
+    },
+    "/_admin/admin/customers/": {
+      "filePath": "_admin/admin/customers/index.lazy.tsx",
+      "parent": "/_admin"
+    },
     "/_admin/admin/orders/": {
       "filePath": "_admin/admin/orders/index.lazy.tsx",
+      "parent": "/_admin"
+    },
+    "/_admin/admin/products/": {
+      "filePath": "_admin/admin/products/index.lazy.tsx",
       "parent": "/_admin"
     },
     "/_admin/admin/orders/recent-orders/": {
