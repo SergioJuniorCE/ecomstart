@@ -1,4 +1,4 @@
-import { Sidebar } from '@/components/dashboard/sidebar'
+import { Sidebar } from '@/components/admin/sidebar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { SheetTrigger, SheetContent, Sheet } from '@/components/ui/sheet'
